@@ -1,2 +1,2 @@
 # cv
-See results of the transformation in folder /results
+See results of the transformations in folder /results
