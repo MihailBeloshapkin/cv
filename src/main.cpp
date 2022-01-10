@@ -46,8 +46,7 @@ void expandByDownBoundary(const Mat& image)
 	{
 		for (int x = 0; x < image.cols; x++)
 		{
-			newImage.at<Vec3b>(y, x) = image.at<Vec3b>(image.rows - y, x);
-		
+			newImage.at<Vec3b>(y, x) = image.at<Vec3b>(image.rows - y, x);	
 		}
 	}
 
@@ -113,7 +112,7 @@ void rotateImage(const Mat& image)
 	Point2f center(image.cols / 2.0, image.rows / 2.0);
 	Mat rot = getRotationMatrix2D(center, angle, 1.0);
 	cv::Rect2f bbox = cv::RotatedRect(cv::Point2f(), image.size(), angle).boundingRect2f();
-        // adjust transformation matrix
+       
         rot.at<double>(0,2) += bbox.width / 2.0 - image.cols / 2.0;
         rot.at<double>(1,2) += bbox.height / 2.0 - image.rows / 2.0;
 
@@ -132,6 +131,24 @@ void binarizeImage(const Mat& image)
         imwrite("results/Binarize.png", binary);
 }
 
+// Change contrast of the image.
+void changeContrast(const Mat& image)
+{
+	Mat newImage;
+	image.convertTo(newImage, -1, 3, 0);
+	imwrite("results/ChangeContrast.png", newImage);
+}
+
+void gammaTransform(const Mat& image, float gamma)
+{
+	Mat dst;
+	image.convertTo(dst, CV_64F);
+	cv::pow(dst, gamma, dst);
+	Mat result;
+	dst.convertTo(result, CV_8U);
+	imwrite("results/GammaTransform.png", result);
+}
+
 int main()
 {
 	Mat image = imread("results/source.jpg", 1);
@@ -143,6 +160,7 @@ int main()
 	cvtGray(image);
 	cvtHsv(image);
 	changeBrightness(image, 1.8, 1);
+	changeContrast(image);
 	expandByRightBoundary(image);
 	expandByDownBoundary(image);
 	applyBlur(image);
@@ -150,6 +168,7 @@ int main()
 	moveRight(image);
 	rotateImage(image);
 	binarizeImage(image);
-	waitKey(0);
+	gammaTransform(image, 1.1);
+	printf("Changes have already been written to folder /results\n");
 	return 0;
 }
