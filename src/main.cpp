@@ -88,6 +88,7 @@ void applyCanny(const Mat& image)
         imwrite("results/Canny.png", newImage);
 }
 
+// 8. Offset right by 10 pixels
 void moveRight(const Mat& image)
 {
 	Mat newImage = Mat::zeros(image.size(), image.type());
@@ -104,7 +105,7 @@ void moveRight(const Mat& image)
         imwrite("results/Move.png", newImage);
 }
 
-
+// 9. Rotates image (45 degrees).
 void rotateImage(const Mat& image)
 {
 	double angle = 45;
@@ -121,6 +122,7 @@ void rotateImage(const Mat& image)
         imwrite("results/Rotation.png", dst);
 }
 
+// Image Binarization.
 void binarizeImage(const Mat& image)
 {
 	Mat gray;
@@ -150,5 +152,4 @@ int main()
 	binarizeImage(image);
 	waitKey(0);
 	return 0;
-
 }
